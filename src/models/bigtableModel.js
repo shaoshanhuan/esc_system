@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export default {
     namespace: 'bigtable',
     state: {
@@ -10,9 +12,16 @@ export default {
                 ...state,
                 columnArr
             };
+        },
+        CHNAGERESULTS  (state, {results}) {
+            return {
+                ...state,
+                results
+            };
         }
     },
     effects: {
+        // 读本地存储
         *GETCOLUMNSFROMLOCALSTORAGE (action, {put}) {
             // 试着从本地存储中读取column字段
             const columnsFromLocalStorage = localStorage.getItem('columns');
@@ -24,6 +33,16 @@ export default {
             // 再次从本地存储中读取列存储信息，并转换
             const columnArr = JSON.parse(localStorage.getItem('columns'));
             yield put({'type': 'CHANGECOLUMNS', columnArr});
+        },
+        // 设本地存储
+        *SETCOLUMNSTOLOCALSTORAGE ({columns}, {put}) {
+            localStorage.setItem('columns', JSON.stringify(columns));
+            yield put({'type': 'GETCOLUMNSFROMLOCALSTORAGE'});
+        },
+        // 读取Ajax
+        *INIT (action, {put}) {
+            const {results, total} = yield axios.get('/api/car').then(data => data.data);
+            yield put({'type': 'CHNAGERESULTS', results});
         }
     }
 };

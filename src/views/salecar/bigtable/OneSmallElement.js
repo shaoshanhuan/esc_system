@@ -9,7 +9,7 @@ export default class OneSmallElement extends Component {
             <div className="onesmallelement" {...this.props}>
                 {this.props.chinese}
                 <b onClick={()=>{
-                    this.props.deloneitem(this.props.english);
+                    this.props.other.deloneitem(this.props.english);
                 }}><Icon type="close" /></b>
             </div>
         );

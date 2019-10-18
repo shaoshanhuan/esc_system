@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'dva';
 import _ from 'lodash';
-import {Icon} from 'antd';
+import {Icon, Button} from 'antd';
 
 import OneSmallElement from './OneSmallElement.js';
 import columnsMap from './columnsMap.js';
@@ -17,7 +17,7 @@ export default class ModalInner extends Component {
         // 这里筹备beixuanArr的初始值，直接交给lodash计算差集。
         let beixuanArr = _.difference(Object.keys(columnsMap), props.columnArr);
         this.state = {
-            'columnArr': props.columnArr,
+            'columnArr': props.columnArr.slice(),
             'beixuanArr': beixuanArr
         };
     }
@@ -49,7 +49,9 @@ export default class ModalInner extends Component {
                                     sortId={i}
                                     english={item}
                                     chinese={columnsMap[item].title}
-                                    deloneitem={this.deloneitem.bind(this)}
+                                    other={{
+                                        deloneitem: this.deloneitem.bind(this)
+                                    }}
                                 >
                                 </OneSmallElement>
                             );
@@ -75,6 +77,14 @@ export default class ModalInner extends Component {
                         </span>)
                     }
                     <div className="clearfix"></div>
+                </div>
+                <div>
+                    <Button onClick={()=>{
+                        this.props.cancelHandler(this.state.cancelHandler);
+                    }}>取消</Button>
+                    <Button onClick={()=>{
+                        this.props.okHandler(this.state.columnArr);
+                    }}>确定</Button>
                 </div>
             </div>
         );
