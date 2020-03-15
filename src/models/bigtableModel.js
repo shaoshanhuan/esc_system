@@ -3,7 +3,7 @@ import axios from 'axios';
 export default {
     namespace: 'bigtable',
     state: {
-        current: 1,
+        current: 3,
         columnArr: []
     },
     reducers: {
